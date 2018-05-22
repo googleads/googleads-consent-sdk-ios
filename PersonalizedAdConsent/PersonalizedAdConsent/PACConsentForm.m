@@ -86,10 +86,10 @@ static NSTimeInterval const PACAnimationDisplayDuration = 0.3;
   PAC_MUST_BE_MAIN_THREAD();
 
   PACDismissCompletion wrappedCompletionHandler =
-      ^(NSError *_Nullable error, BOOL userPrefersAdFree) {
+      ^(NSError *_Nullable error, PACConsentStatus consentStatus, BOOL userPrefersAdFree) {
         if (completionHandler) {
           dispatch_async(dispatch_get_main_queue(), ^{
-            completionHandler(error, userPrefersAdFree);
+            completionHandler(error, consentStatus, userPrefersAdFree);
           });
         }
       };
@@ -103,7 +103,7 @@ static NSTimeInterval const PACAnimationDisplayDuration = 0.3;
   }
 
   if (error) {
-    wrappedCompletionHandler(error, NO);
+    wrappedCompletionHandler(error, PACConsentInformation.sharedInstance.consentStatus, NO);
     return;
   }
 
@@ -127,9 +127,11 @@ static NSTimeInterval const PACAnimationDisplayDuration = 0.3;
   }
 }
 
-- (void)dismissedViewWithError:(nullable NSError *)error userPrefersAdFree:(BOOL)userPrefersAdFree {
+- (void)dismissedViewWithError:(nullable NSError *)error
+                 consentStatus:(PACConsentStatus)consentStatus
+             userPrefersAdFree:(BOOL)userPrefersAdFree {
   dispatch_async(dispatch_get_main_queue(), ^{
-    self->_completionHandler(error, userPrefersAdFree);
+    self->_completionHandler(error, consentStatus, userPrefersAdFree);
     self->_completionHandler = nil;
   });
 }
@@ -142,10 +144,11 @@ static NSTimeInterval const PACAnimationDisplayDuration = 0.3;
   PACViewController *pacViewController = [[PACViewController alloc] initWithConsentView:view];
 
   // Reference the view until the view is dismissed.
-  view.dismissCompletion = ^(NSError *_Nullable error, BOOL userPrefersAdFree) {
+  view.dismissCompletion = ^(NSError *_Nullable error, PACConsentStatus consentStatus, BOOL userPrefersAdFree) {
     [viewController dismissViewControllerAnimated:YES
                                        completion:^{
                                          [self dismissedViewWithError:error
+                                                        consentStatus:consentStatus
                                                     userPrefersAdFree:userPrefersAdFree];
                                        }];
   };
@@ -159,8 +162,8 @@ static NSTimeInterval const PACAnimationDisplayDuration = 0.3;
 - (void)presentView:(nonnull PACView *)view usingWindow:(nonnull UIWindow *)window {
   // Reference the view until the view is dismissed.
   PACView *strongView = view;
-  view.dismissCompletion = ^(NSError *_Nullable error, BOOL userPrefersAdFree) {
-    [self dismissView:strongView error:error userPrefersAdFree:userPrefersAdFree];
+  view.dismissCompletion = ^(NSError *_Nullable error, PACConsentStatus consentStatus, BOOL userPrefersAdFree) {
+    [self dismissView:strongView error:error consentStatus:consentStatus userPrefersAdFree:userPrefersAdFree];
   };
   view.frame = window.bounds;
   view.alpha = 0;
@@ -174,6 +177,7 @@ static NSTimeInterval const PACAnimationDisplayDuration = 0.3;
 /// Dismisses the view presented by -presentView:usingWindow:.
 - (void)dismissView:(nonnull PACView *)view
                 error:(nullable NSError *)error
+        consentStatus:(PACConsentStatus)consentStatus
     userPrefersAdFree:(BOOL)userPrefersAdFree {
   [UIView animateWithDuration:PACAnimationDisplayDuration
       animations:^{
@@ -181,7 +185,9 @@ static NSTimeInterval const PACAnimationDisplayDuration = 0.3;
       }
       completion:^(BOOL finished) {
         [view removeFromSuperview];
-        [self dismissedViewWithError:error userPrefersAdFree:userPrefersAdFree];
+        [self dismissedViewWithError:error
+                       consentStatus:consentStatus
+                   userPrefersAdFree:userPrefersAdFree];
       }];
 }
 

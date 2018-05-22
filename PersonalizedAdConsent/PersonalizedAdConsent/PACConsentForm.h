@@ -18,7 +18,7 @@
 
 /// Called after load completes. `error` is set if the load failed.
 typedef void (^PACLoadCompletion)(NSError *_Nullable error);
-typedef void (^PACDismissCompletion)(NSError *_Nullable error, BOOL userPrefersAdFree);
+typedef void (^PACDismissCompletion)(NSError *_Nullable error, PACConsentStatus consentStatus, BOOL userPrefersAdFree);
 
 /// A single use consent form object.
 @interface PACConsentForm : NSObject
