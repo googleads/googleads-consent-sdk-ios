@@ -361,7 +361,7 @@ PACDeserializeAdProviders(NSArray<NSDictionary *> *_Nullable serializedProviders
   NSMutableArray *notFoundPublisherIdentifiers = [[NSMutableArray alloc] init];
   NSArray<NSDictionary *> *adNetworks = info[@"ad_network_ids"];
   for (NSDictionary<NSString *, id> *adNetwork in adNetworks) {
-    NSString *publisherIdentifier = adNetwork[@"ad_network_id"] ?: @"Publisher identifier missing";
+    NSString *publisherIdentifier = adNetwork[@"ad_network_id"] ?: NSLocalizedString(@"Publisher identifier missing", nil);
     NSNumber *lookupFailed = adNetwork[@"lookup_failed"] ?: @NO;
     NSNumber *notFound = adNetwork[@"not_found"] ?: @NO;
     if (lookupFailed.boolValue) {
@@ -377,13 +377,13 @@ PACDeserializeAdProviders(NSArray<NSDictionary *> *_Nullable serializedProviders
   }
 
   NSMutableArray *errorMessages = [[NSMutableArray alloc] init];
-  [errorMessages addObject:@"Response error."];
+  [errorMessages addObject:NSLocalizedString(@"Response error.", nil)];
 
   if (lookupFailedPublisherIdentifiers.count) {
     NSString *commaSeparatedPublisherIdentifiers =
         [lookupFailedPublisherIdentifiers componentsJoinedByString:@", "];
     NSString *message = [[NSString alloc]
-        initWithFormat:@"Lookup failure for: %@", commaSeparatedPublisherIdentifiers];
+        initWithFormat:NSLocalizedString(@"Lookup failure for: %@", nil), commaSeparatedPublisherIdentifiers];
     [errorMessages addObject:message];
   }
 
@@ -391,7 +391,7 @@ PACDeserializeAdProviders(NSArray<NSDictionary *> *_Nullable serializedProviders
     NSString *commaSeparatedPublisherIdentifiers =
         [notFoundPublisherIdentifiers componentsJoinedByString:@", "];
     NSString *message = [[NSString alloc]
-        initWithFormat:@"Publisher identifiers not found: %@", commaSeparatedPublisherIdentifiers];
+        initWithFormat:NSLocalizedString(@"Publisher identifiers not found: %@", nil), commaSeparatedPublisherIdentifiers];
     [errorMessages addObject:message];
   }
 
