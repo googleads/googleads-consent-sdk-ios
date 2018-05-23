@@ -236,7 +236,9 @@ PACQueryParametersFromURL(NSURL *_Nonnull URL) {
 - (void)showBrowser:(nonnull NSURL *)URL {
   UIApplication *sharedApplication = UIApplication.sharedApplication;
   if ([sharedApplication respondsToSelector:@selector(openURL:options:completionHandler:)]) {
-    if (@available(iOS 10.0, *)) {
+    NSOperatingSystemVersion ios10 = (NSOperatingSystemVersion){10, 0, 0};
+
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:ios10]) {
       [sharedApplication openURL:URL options:@{} completionHandler:nil];
     }
   } else {
