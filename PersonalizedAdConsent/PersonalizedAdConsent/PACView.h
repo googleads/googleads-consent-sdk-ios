@@ -24,6 +24,7 @@ static PACFormKey const PACFormKeyAppPrivacyPolicyURLString = @"app_privacy_url"
 static PACFormKey const PACFormKeyConstentInfo = @"consent_info";
 static PACFormKey const PACFormKeyAppName = @"app_name";
 static PACFormKey const PACFormKeyAppIcon = @"app_icon";
+static PACFormKey const PACFormKeyPlatform = @"plat";
 
 /// Loads and displays the consent form.
 @interface PACView : UIView<UIWebViewDelegate>

@@ -29,10 +29,11 @@
 - (nullable instancetype)initWithDictionary:(nullable NSDictionary<NSString *, id> *)dictionary;
 @end
 
+NSString *const PACVersionString = @"1.0.1";
 NSString *const PACUserDefaultsRootKey = @"personalized_ad_status";
 
 static NSString *const PACInfoUpdateURLFormat =
-    @"https://adservice.google.com/getconfig/pubvendors?es=2&pubs=%@";
+    @"https://adservice.google.com/getconfig/pubvendors?es=2&plat=ios&v=%@&pubs=%@";
 
 typedef NSString *PACStoreKey NS_STRING_ENUM;
 static PACStoreKey const PACStoreKeyTaggedForUnderAgeOfConsent = @"tag_for_under_age_of_consent";
@@ -44,6 +45,8 @@ static PACStoreKey const PACStoreKeyProviders = @"providers";
 static PACStoreKey const PACStoreKeyConsentedProviders = @"consented_providers";
 static PACStoreKey const PACStoreKeyRawResponse = @"raw_response";
 static PACStoreKey const PACStoreKeyIsRequestInEEAOrUnknown = @"is_request_in_eea_or_unknown";
+static PACStoreKey const PACStoreKeyVersionString = @"version";
+static PACStoreKey const PACStoreKeyPlatform = @"plat";
 
 typedef NSString *PACConsentStatusString NS_STRING_ENUM;
 static PACConsentStatusString const PACConsentStatusStringUnknown = @"unknown";
@@ -236,6 +239,8 @@ PACDeserializeAdProviders(NSArray<NSDictionary *> *_Nullable serializedProviders
   PAC_MUST_BE_MAIN_THREAD();
 
   NSDictionary<PACStoreKey, id> *personalizedAdStatus = @{
+    PACStoreKeyVersionString : PACVersionString,
+    PACStoreKeyPlatform : @"ios",
     PACStoreKeyTaggedForUnderAgeOfConsent : _tagForUnderAgeOfConsent ? @1 : @0,
     PACStoreKeyIsRequestInEEAOrUnknown : _isRequestInEEAOrUnknown ? @1 : @0,
     PACStoreKeyHasAnyNonPersonalizedPublisherIdentifier :
@@ -267,8 +272,8 @@ PACDeserializeAdProviders(NSArray<NSDictionary *> *_Nullable serializedProviders
   if (!publisherIdentifierString.length) {
     publisherIdentifierString = @"";
   }
-  NSString *infoUpdateURLString =
-      [[NSString alloc] initWithFormat:PACInfoUpdateURLFormat, publisherIdentifierString];
+  NSString *infoUpdateURLString = [[NSString alloc]
+      initWithFormat:PACInfoUpdateURLFormat, PACVersionString, publisherIdentifierString];
 
   if ([self debugModeEnabled]) {
     NSString *debugGeographyParam = @"";

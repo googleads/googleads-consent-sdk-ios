@@ -162,31 +162,49 @@ PACQueryParametersFromURL(NSURL *_Nonnull URL) {
 - (void)loadWithFormInformation:(nonnull NSDictionary<PACFormKey, id> *)formInformation
               completionHandler:(nonnull PACLoadCompletion)handler {
   formInformation = [formInformation copy];
+  PACLoadCompletion wrappedHandler = ^(NSError *_Nullable error) {
+    if (handler) {
+      handler(error);
+    }
+  };
   dispatch_async(dispatch_get_main_queue(), ^{
     if (self->_loadCompletionHandler) {
       // In progress.
       NSError *error = PACErrorWithDescription(@"Another load is in progress.");
-      if (handler) {
-        handler(error);
-      }
+      wrappedHandler(error);
       return;
     }
     self->_formInformation = formInformation;
-    self->_loadCompletionHandler = ^(NSError *_Nullable error) {
-      if (handler) {
-        handler(error);
-      }
-    };
+    self->_loadCompletionHandler = wrappedHandler;
     [self loadWebView];
   });
 }
 
+/// Returns the resource bundle located within |bundle|.
+- (nullable NSBundle *)resourceBundleForBundle:(nonnull NSBundle *)bundle {
+  NSURL *resourceBundleURL =
+      [bundle URLForResource:@"PersonalizedAdConsent" withExtension:@"bundle"];
+  if (resourceBundleURL) {
+    return [NSBundle bundleWithURL:resourceBundleURL];
+  }
+  return nil;
+}
+
 /// Loads the consent form HTML into the web view.
 - (void)loadWebView {
-  NSURL *bundleURL =
-      [[NSBundle mainBundle] URLForResource:@"PersonalizedAdConsent" withExtension:@"bundle"];
-  NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
-  NSURL *URL = [bundle URLForResource:@"consentform" withExtension:@"html"];
+  NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+  NSBundle *resourceBundle = [self resourceBundleForBundle:bundle];
+  if (!resourceBundle) {
+    resourceBundle = [self resourceBundleForBundle:[NSBundle mainBundle]];
+  }
+  if (!resourceBundle) {
+    NSError *error =
+        PACErrorWithDescription(@"Resource bundle not found. Ensure the resource bundle is "
+                                @"packaged with your application or framework bundle.");
+    [self loadCompletedWithError:error];
+    return;
+  }
+  NSURL *URL = [resourceBundle URLForResource:@"consentform" withExtension:@"html"];
   NSURLRequest *URLRequest = [[NSURLRequest alloc] initWithURL:URL];
   [_webView loadRequest:URLRequest];
 }
@@ -198,6 +216,7 @@ PACQueryParametersFromURL(NSURL *_Nonnull URL) {
         [self->_formInformation mutableCopy];
     mutableFormInformation[PACFormKeyAppName] = PACShortAppName();
     mutableFormInformation[PACFormKeyAppIcon] = PACIconDataURIString();
+    mutableFormInformation[PACFormKeyPlatform] = @"ios";
 
     NSString *infoString = PACJSONStringForDictionary(mutableFormInformation);
     NSString *command = PACCreateJavaScriptCommandString(@"setUpConsentDialog", @{
