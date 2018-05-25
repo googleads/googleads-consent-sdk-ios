@@ -330,8 +330,12 @@ PACDeserializeAdProviders(NSArray<NSDictionary *> *_Nullable serializedProviders
                  return;
                }
 
-               NSDictionary<NSString *, id> *info =
-                   [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+               NSString * dataString = [[NSString alloc] initWithData:data
+                                                             encoding:NSWindowsCP1251StringEncoding];
+               NSData * dataInUTFEncoding = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+               NSDictionary<NSString *, id> *info = [NSJSONSerialization JSONObjectWithData:dataInUTFEncoding
+                                                                                    options:0
+                                                                                      error:&error];
                if (error || ![info isKindOfClass:[NSDictionary class]]) {
                  if (!error) {
                    error = PACErrorWithDescription(@"Invalid response.");
