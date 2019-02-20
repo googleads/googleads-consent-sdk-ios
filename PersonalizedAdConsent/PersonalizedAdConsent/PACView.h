@@ -29,7 +29,8 @@ static PACFormKey const PACFormKeyPlatform = @"plat";
 /// Loads and displays the consent form.
 @interface PACView : UIView<UIWebViewDelegate>
 @property(nonatomic, nullable) PACDismissCompletion dismissCompletion;
-@property(nonatomic) BOOL shouldNonPersonalizedAds;
+@property(nonatomic) BOOL shouldOfferPersonalizedAds;
+@property(nonatomic) BOOL shouldOfferNonPersonalizedAds;
 @property(nonatomic) BOOL shouldOfferAdFree;
 
 /// Loads the view with form information and calls the handler on the main queue.
