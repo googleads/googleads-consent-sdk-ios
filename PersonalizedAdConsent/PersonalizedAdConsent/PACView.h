@@ -17,14 +17,14 @@
 #import "PACConsentForm.h"
 
 typedef NSString *PACFormKey NS_STRING_ENUM;
-static PACFormKey const PACFormKeyOfferPersonalized = @"offer_personalized";
-static PACFormKey const PACFormKeyOfferNonPersonalized = @"offer_non_personalized";
-static PACFormKey const PACFormKeyOfferAdFree = @"offer_ad_free";
-static PACFormKey const PACFormKeyAppPrivacyPolicyURLString = @"app_privacy_url";
-static PACFormKey const PACFormKeyConstentInfo = @"consent_info";
-static PACFormKey const PACFormKeyAppName = @"app_name";
-static PACFormKey const PACFormKeyAppIcon = @"app_icon";
-static PACFormKey const PACFormKeyPlatform = @"plat";
+static PACFormKey const _Nonnull PACFormKeyOfferPersonalized = @"offer_personalized";
+static PACFormKey const _Nonnull PACFormKeyOfferNonPersonalized = @"offer_non_personalized";
+static PACFormKey const _Nonnull PACFormKeyOfferAdFree = @"offer_ad_free";
+static PACFormKey const _Nonnull PACFormKeyAppPrivacyPolicyURLString = @"app_privacy_url";
+static PACFormKey const _Nonnull PACFormKeyConstentInfo = @"consent_info";
+static PACFormKey const _Nonnull PACFormKeyAppName = @"app_name";
+static PACFormKey const _Nonnull PACFormKeyAppIcon = @"app_icon";
+static PACFormKey const _Nonnull PACFormKeyPlatform = @"plat";
 
 /// Loads and displays the consent form.
 @interface PACView : UIView<UIWebViewDelegate>
