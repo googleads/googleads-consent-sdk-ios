@@ -78,8 +78,15 @@
 		5A92D2A12076961800FFE51D /* PersonalizedAdConsent */ = {
 			isa = PBXGroup;
 			children = (
-				5A5022F020AF782A00E98A1F /* PersonalizedAdConsent.bundle */,
-				5A4B555A209239AB000E14B8 /* module.modulemap */,
+				DBCED54120B48CB700455363 /* Resources */,
+				DB862D5620B48C98006F9EA8 /* Sources */,
+			);
+			path = PersonalizedAdConsent;
+			sourceTree = "<group>";
+		};
+		DB862D5620B48C98006F9EA8 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
 				5A5669CB20AE28170061B6B2 /* PersonalizedAdConsent.h */,
 				5A92D2A22076961800FFE51D /* PACPersonalizedAdConsent.h */,
 				5A92D2B92076965D00FFE51D /* PACPersonalizedAdConsent.m */,
@@ -89,9 +96,18 @@
 				5A20E047208A788A0012D068 /* PACView.m */,
 				5A4B54FA2090D7FE000E14B8 /* PACConsentForm.h */,
 				5A647C3B208A7AE4004B88F0 /* PACConsentForm.m */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		DBCED54120B48CB700455363 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5A5022F020AF782A00E98A1F /* PersonalizedAdConsent.bundle */,
+				5A4B555A209239AB000E14B8 /* module.modulemap */,
 				5A92D2A32076961800FFE51D /* Info.plist */,
 			);
-			path = PersonalizedAdConsent;
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

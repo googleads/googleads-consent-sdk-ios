@@ -71,11 +71,11 @@ typedef void (^PACConsentInformationUpdateHandler)(NSError *_Nullable error);
     BOOL requestLocationInEEAOrUnknown;
 
 /// Array of ad providers.
-@property(nonatomic, readonly, nullable) NSArray<PACAdProvider *> *adProviders;
+@property(nonatomic, readonly, nullable, copy) NSArray<PACAdProvider *> *adProviders;
 
 /// Array of advertising identifier UUID strings. Debug features are enabled for devices with these
 /// identifiers. Debug features are always enabled for simulators.
-@property(nonatomic, nullable) NSArray<NSString *> *debugIdentifiers;
+@property(nonatomic, nullable, copy) NSArray<NSString *> *debugIdentifiers;
 
 /// Debug geography. Used for debug devices only.
 @property(nonatomic) PACDebugGeography debugGeography;

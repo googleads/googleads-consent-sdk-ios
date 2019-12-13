@@ -245,7 +245,7 @@ PACQueryParametersFromURL(NSURL *_Nonnull URL) {
     if (self->_dismissCompletion) {
       NSError *error = formStatus[PACFormStatusKeyError];
       NSNumber *userPrefersAdFreeNumber = formStatus[PACFormStatusKeyUserPrefersAdFree];
-      self->_dismissCompletion(error, userPrefersAdFreeNumber.boolValue);
+      self->_dismissCompletion(error, PACConsentInformation.sharedInstance.consentStatus, userPrefersAdFreeNumber.boolValue);
     }
     self->_dismissCompletion = nil;
   });
