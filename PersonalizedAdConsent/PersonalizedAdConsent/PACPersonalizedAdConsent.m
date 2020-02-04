@@ -29,7 +29,7 @@
 - (nullable instancetype)initWithDictionary:(nullable NSDictionary<NSString *, id> *)dictionary;
 @end
 
-NSString *const PACVersionString = @"1.0.4";
+NSString *const PACVersionString = @"1.0.5";
 NSString *const PACUserDefaultsRootKey = @"personalized_ad_status";
 
 static NSString *const PACInfoUpdateURLFormat =
@@ -267,7 +267,7 @@ static NSOrderedSet<PACAdProvider *> *_Nonnull PACDeserializeAdProviders(
 
 /// Returns an info update URL for the provided publisher identifiers.
 - (nullable NSURL *)infoUpdateURLForPublisherIdentifiers:
-        (nonnull NSArray<NSString *> *)publisherIdentifiers {
+    (nonnull NSArray<NSString *> *)publisherIdentifiers {
   NSString *publisherIdentifierString = [publisherIdentifiers componentsJoinedByString:@","];
   if (!publisherIdentifierString.length) {
     publisherIdentifierString = @"";
