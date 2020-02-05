@@ -31,8 +31,11 @@ typedef void (^PACDismissCompletion)(NSError *_Nullable error, BOOL userPrefersA
 /// Indicates whether the consent form should show an ad-free app option. Defaults to NO.
 @property(nonatomic) BOOL shouldOfferAdFree;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullability"
 /// Unavailable.
 - (nullable instancetype)init NS_UNAVAILABLE;
+#pragma clang diagnostic pop
 
 /// Returns an initialized consent form with your application's privacy policy URL. Returns nil if
 /// the privacy policy URL is invalid.
